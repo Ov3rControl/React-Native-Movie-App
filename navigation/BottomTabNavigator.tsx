@@ -8,7 +8,13 @@ import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import Home from '../screens/Home';
 import Search from '../screens/Search';
-import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
+import Cart from '../screens/Cart';
+import {
+  BottomTabParamList,
+  TabOneParamList,
+  TabTwoParamList,
+  TabThreeParamList,
+} from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -24,15 +30,26 @@ export default function BottomTabNavigator() {
         name="Home"
         component={TabOneNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+          tabBarIcon: ({ color }: { color: string }) => (
+            <TabBarIcon name="home" color={color} />
+          ),
         }}
       />
       <BottomTab.Screen
         name="Search"
         component={TabTwoNavigator}
         options={{
-          tabBarIcon: ({ color }) => (
+          tabBarIcon: ({ color }: { color: string }) => (
             <TabBarIcon name="search1" color={color} />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name="Cart"
+        component={TabThreeNavigator}
+        options={{
+          tabBarIcon: ({ color }: { color: string }) => (
+            <TabBarIcon name="shoppingcart" color={color} />
           ),
         }}
       />
@@ -40,8 +57,6 @@ export default function BottomTabNavigator() {
   );
 }
 
-// You can explore the built-in icon families and icons on the web at:
-// https://icons.expo.fyi/
 function TabBarIcon(props: { name: string; color: string }) {
   return (
     <AntDesign
@@ -53,8 +68,6 @@ function TabBarIcon(props: { name: string; color: string }) {
   );
 }
 
-// Each tab has its own navigation stack, you can read more about this pattern here:
-// https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
 const TabOneStack = createStackNavigator<TabOneParamList>();
 
 function TabOneNavigator() {
@@ -63,7 +76,7 @@ function TabOneNavigator() {
       <TabOneStack.Screen
         name="HomeScreen"
         component={Home}
-        options={{ headerTitle: 'Home' }}
+        options={{ headerTitle: 'Home', headerTitleAlign: 'center' }}
       />
     </TabOneStack.Navigator>
   );
@@ -77,8 +90,22 @@ function TabTwoNavigator() {
       <TabTwoStack.Screen
         name="SearchScreen"
         component={Search}
-        options={{ headerTitle: 'Tab Two Title' }}
+        options={{ headerTitle: 'Search', headerTitleAlign: 'center' }}
       />
     </TabTwoStack.Navigator>
+  );
+}
+
+const TabThreeStack = createStackNavigator<TabThreeParamList>();
+
+function TabThreeNavigator() {
+  return (
+    <TabThreeStack.Navigator>
+      <TabThreeStack.Screen
+        name="CartScreen"
+        component={Cart}
+        options={{ headerTitle: 'Cart', headerTitleAlign: 'center' }}
+      />
+    </TabThreeStack.Navigator>
   );
 }
