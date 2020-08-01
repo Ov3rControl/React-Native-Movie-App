@@ -8,60 +8,92 @@ import {
 import { Button, Card, IconButton, Portal, Dialog } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
 import LottieView from 'lottie-react-native';
+import { useRecoilState, useResetRecoilState } from 'recoil';
+import { CartAtom } from '../../store/atoms/atoms';
+
+export interface IProducts {
+  id: number;
+  title: string;
+  price: number;
+  thumbnailUrl: string;
+}
 
 export const Cart: React.FC = () => {
   const [visible, setVisible] = React.useState(false);
-
+  const [data, setData] = useRecoilState(CartAtom);
+  const resetData = useResetRecoilState(CartAtom);
   const hideDialog = () => setVisible(false);
+  const totalPrice = data.products.reduce((a, { price }) => a + price, 0);
+  const removeMoveFromCart = (id: number) => {
+    const index = data.products.findIndex((obj: any) => obj.id === id);
+    const newData = [
+      ...data.products.slice(0, index),
+      ...data.products.slice(index + 1),
+    ];
+    setData({ products: newData });
+  };
   return (
     <View style={styles.container}>
-      {/* <View style={styles.emptyCart}>
-        <MaterialIcons
-          name="remove-shopping-cart"
-          size={160}
-          color="gainsboro"
-        />
-        <Text style={{ fontWeight: 'bold', color: 'grey' }}>
-          Your Cart is Empty
-        </Text>
-      </View> */}
-
-      <ScrollView>
-        <Card style={styles.productsContainer}>
-          <Card.Title
-            titleStyle={{ fontSize: hp('2.5%') }}
-            subtitleStyle={{ fontSize: hp('1.8%'), color: 'dodgerblue' }}
-            title="The Exapendables 3"
-            subtitle="200 EGP"
-            left={() => (
-              <Image
-                style={styles.thumbnail}
-                source={{
-                  uri:
-                    'https://image.tmdb.org/t/p/w185/mb7wQv0adK3kjOUr9n93mANHhPJ.jpg',
-                }}
-              />
-            )}
-            right={(props) => (
-              <IconButton
-                {...props}
-                icon="delete"
-                color="grey"
-                onPress={() => {}}
-              />
-            )}
+      {data.products.length < 1 ? (
+        <View style={styles.emptyCart}>
+          <MaterialIcons
+            name="remove-shopping-cart"
+            size={160}
+            color="gainsboro"
           />
-        </Card>
-      </ScrollView>
-      <Button
-        style={{ marginTop: 15 }}
-        dark
-        color="dodgerblue"
-        mode="contained"
-        onPress={() => setVisible(true)}
-      >
-        721 L.E Checkout
-      </Button>
+          <Text style={{ fontWeight: 'bold', color: 'grey' }}>
+            Your Cart is Empty
+          </Text>
+        </View>
+      ) : (
+        <>
+          <ScrollView>
+            {data.products &&
+              data.products.map((product: any) => (
+                <Card key={product?.id} style={styles.productsContainer}>
+                  <Card.Title
+                    titleStyle={{ fontSize: hp('2.5%') }}
+                    subtitleStyle={{
+                      fontSize: hp('1.8%'),
+                      color: 'dodgerblue',
+                    }}
+                    title={product?.title}
+                    subtitle={product?.price + ' EGP'}
+                    left={() => (
+                      <Image
+                        style={styles.thumbnail}
+                        source={{
+                          uri: `https://image.tmdb.org/t/p/w185/${product.thumbnailUrl}`,
+                        }}
+                      />
+                    )}
+                    right={(props) => (
+                      <IconButton
+                        {...props}
+                        icon="delete"
+                        color="grey"
+                        onPress={() => removeMoveFromCart(product.id)}
+                      />
+                    )}
+                  />
+                </Card>
+              ))}
+          </ScrollView>
+          <Button
+            style={{ marginTop: 15 }}
+            dark
+            color="dodgerblue"
+            mode="contained"
+            onPress={() => {
+              setVisible(true);
+              resetData();
+            }}
+          >
+            {totalPrice} L.E Checkout
+          </Button>
+        </>
+      )}
+
       <Portal>
         <Dialog visible={visible} onDismiss={hideDialog}>
           <Dialog.Content>

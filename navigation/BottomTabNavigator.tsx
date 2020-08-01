@@ -104,7 +104,7 @@ function TabThreeNavigator() {
       <TabThreeStack.Screen
         name="CartScreen"
         component={Cart}
-        options={{ headerTitle: 'Cart', headerTitleAlign: 'center' }}
+        options={{ headerTitle: 'My Cart', headerTitleAlign: 'center' }}
       />
     </TabThreeStack.Navigator>
   );
