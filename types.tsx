@@ -6,6 +6,7 @@ export type RootStackParamList = {
 export type BottomTabParamList = {
   Home: undefined;
   Search: undefined;
+  Cart: undefined;
 };
 
 export type TabOneParamList = {
@@ -14,4 +15,7 @@ export type TabOneParamList = {
 
 export type TabTwoParamList = {
   SearchScreen: undefined;
+};
+export type TabThreeParamList = {
+  CartScreen: undefined;
 };
