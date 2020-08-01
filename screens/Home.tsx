@@ -2,16 +2,13 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
 import { Text, View } from '../components/Themed';
+import { MostPopular } from '../components/Home/MostPopular';
 
 export default function HomeTab() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
+      <Text style={styles.title}>Most Popular</Text>
+      <MostPopular />
     </View>
   );
 }
@@ -20,15 +17,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    padding: 10,
   },
   title: {
+    marginTop: 5,
     fontSize: 20,
     fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+    alignSelf: 'flex-start',
+    marginBottom: 5,
   },
 });
